@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thư Gửi Em</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+    
+        .letter {
+            background: white;
+            padding: 30px; /* Giữ nguyên padding ban đầu cho máy tính */
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            max-width: 500px; /* Giữ nguyên max-width ban đầu cho máy tính */
+            text-align: center;
+            animation: fadeIn 1s ease-in;
+            box-sizing: border-box; /* Thêm để padding không ảnh hưởng kích thước */
+        }
+    
+        h1 {
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+    
+        #letterContent {
+            color: #333;
+            line-height: 1.6;
+            margin: 15px 0;
+            display: none; /* Ẩn nội dung ban đầu */
+        }
+    
+        .heart {
+            color: #ff6b6b;
+            font-size: 24px;
+            animation: beat 1s infinite;
+        }
+    
+        .button {
+            background: #ff6b6b;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.3s;
+        }
+    
+        .button:hover {
+            transform: scale(1.1);
+        }
+    
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    
+        @keyframes beat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    
+        /* Điều chỉnh cho màn hình nhỏ (điện thoại) */
+        @media (max-width: 600px) {
+            .letter {
+                padding: 20px; /* Giảm padding cho điện thoại */
+                max-width: 90vw; /* Dùng đơn vị tương đối cho điện thoại */
+                margin: 15px; /* Thêm margin để không chạm rìa */
+            }
+            h1 {
+                font-size: 24px; /* Giảm kích thước chữ cho điện thoại */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="letter">
+        <h1>Gửi Em Yêu ❤️</h1>
+        <div id="letterContent"></div>
+        <button class="button" onclick="showLetter()">Nhấn để đọc thư</button>
+    </div>
+
+    <script>
+        const fullText = [
+            "Hôm nay là 8/3, ngày đặc biệt dành cho một nữa thế giới của anh. Chúc em bé của anh luôn xinh đẹp, vui vẻ và hạnh phúc, không chỉ hôm nay mà mỗi ngày đều tràn ngập niềm vui, đặc biệt khi có anh:>>. Cảm ơn em vì đã luôn bên anh tha thứ cho anh dù anh mắc phải những sai lầm dù cho có nhỏ hay lớn đi bao nhiêu. Chúc em bé của anh có một ngày 8/3 thật hạnh phúc ạ. ❤️",
+            "Anh yêu em nhiều nhắmmmmmm:3",
+            "❤️"
+        ];
+
+        let isShowing = false;
+
+        function showLetter() {
+            if (isShowing) return; // Ngăn nhấn nhiều lần
+            isShowing = true;
+
+            const contentDiv = document.getElementById("letterContent");
+            contentDiv.style.display = "block"; // Hiện nội dung
+            contentDiv.innerHTML = ""; // Xóa nội dung cũ
+
+            // Ẩn nút sau khi nhấn
+            document.querySelector(".button").style.display = "none";
+
+            // Hiển thị từng dòng theo thứ tự
+            typeParagraphs(0);
+        }
+
+        function typeParagraphs(paragraphIndex) {
+            if (paragraphIndex >= fullText.length) return; // Dừng khi hết dòng
+
+            const contentDiv = document.getElementById("letterContent");
+            const p = document.createElement("p");
+            if (paragraphIndex === fullText.length - 1) p.className = "heart"; // Thêm class heart cho dòng cuối
+            contentDiv.appendChild(p);
+
+            typeWriter(p, fullText[paragraphIndex], 0, () => {
+                // Sau khi dòng hiện tại hoàn thành, chuyển sang dòng tiếp theo
+                typeParagraphs(paragraphIndex + 1);
+            });
+        }
+
+        function typeWriter(element, text, charIndex, callback) {
+            if (charIndex < text.length) {
+                element.innerHTML += text.charAt(charIndex);
+                setTimeout(() => typeWriter(element, text, charIndex + 1, callback), 30); // Tốc độ gõ
+            } else if (callback) {
+                callback(); // Gọi hàm callback khi hoàn thành dòng
+            }
+        }
+    </script>
+</body>
+</html>
